@@ -2,7 +2,7 @@
 Contributors: arengu
 Tags: arengu, forms, lead generation, contact forms, lead forms, multi step forms, mobile forms, file upload forms, form builder, custom forms, mobile forms, payment forms, order forms, feedback forms, enquiry forms, workflows, form workflows, automation, integrations
 Requires at least: 4.5
-Tested up to: 4.9.4
+Tested up to: 4.9.8
 License: Apache License v2
 License URI: http://www.apache.org/licenses/LICENSE-2.0
 
