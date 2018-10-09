@@ -14,7 +14,7 @@ Collect data with smarter forms and automate your business with powerful and fle
 Arengu helps you collecting data with smarter forms and automating your business with powerful and flexible workflows. Use our drag & drop form builder to easily create your own form and easily embed your form into any page of your website with a shortcode. Receive your results in real-time and enable email or push notifications.
 
 > <strong> Important </strong><br>
-> This plugin is for embedding forms created on arengu.com. You can't edit them or see responses inside WordPress.
+> This plugin is for embedding forms created on arengu.com and it uses our open source [JavaScript SDK](https://github.com/arengu/arengu-forms-js). You can only edit forms or see submissions inside our platform.
 
 ------------
 
@@ -22,6 +22,8 @@ Arengu helps you collecting data with smarter forms and automating your business
 * Different field types including text, number, multiple choice, dropdown, email, legal, date, file upload and payment
 * Use our native integrations and easily connect your favourite apps
 * Export submissions to CSV and JSON
+
+[See more at arengu.com](https://www.arengu.com)
 
 == Installation ==
 
