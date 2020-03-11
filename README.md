@@ -15,6 +15,7 @@ Sign up users with email and password or just with an email (passwordless signup
 | ------ | ------ | ------ |
 | email _(required)_| [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | The user email. |
 | password | [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | The user plain password. If you don't provide a password a random one will be generated. This is useful if you want to use passwordless flows. |
+| sessionDuration | [Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number) | Cookie session duration in seconds (Default value is 7200). |
 | meta | [Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) | An object with key-value pairs with user meta data. |
 
 #### Request sample
@@ -50,8 +51,8 @@ Sign up users with email and password or just with an email (passwordless signup
 
 | Error code | Description |
 | ------ | ------ |
-| existing_user_login | This email is already being used by another user |
-| empty_user_login | You are not sending an email addres in the request |
+| existing_user_login | This email is already being used by another user. |
+| empty_user_login | You are not sending an email addres in the request. |
 
 ### **Passwordless**
 
@@ -59,13 +60,14 @@ Authenticate users without password.
 
 `POST` **/wp-json/arengu/passwordless/auth**
 
-⚠️ **`IMPORTANT`** This endpoint is made to be used adding one authentication factor to verify the user identity (eg. one-time password via email or SMS, social login, etc).
+⚠️ **IMPORTANT** ⚠️ This endpoint is made to be used adding one authentication factor to verify the user identity (eg. one-time password via email or SMS, social login, etc).
 
 #### Request parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| email _(required)_| [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | The user email you want to sign up. |
+| email _(required)_| [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | The user email you want to authenticate. |
+| sessionDuration | [Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number) | Cookie session duration in seconds (Default value is 7200). |
 
 #### Request sample
 
@@ -95,7 +97,7 @@ Authenticate users without password.
 
 | Error code | Description |
 | ------ | ------ |
-| email_not_exists | This email is not registered in your database |
+| email_not_exists | This email is not registered in your database. |
 
 ### **Login**
 
@@ -109,6 +111,7 @@ Log in users with email and password.
 | ------ | ------ | ------ |
 | email _(required)_| [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | The user email you want to sign up. |
 | password _(required)_ | [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | Query selector or DOM element that the form will be appended to. |
+| sessionDuration | [Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number) | Cookie session duration in seconds (Default value is 7200). |
 
 #### Request sample
 
@@ -139,10 +142,10 @@ Log in users with email and password.
 
 | Error code | Description |
 | ------ | ------ |
-| empty_username | You are not sending an email address in the request |
-| empty_password | You are sending an empty or no password in the request |
-| invalid_email | You are providing an invalid email address |
-| incorrect_password | You are providing an invalid password |
+| empty_username | You are not sending an email address in the request. |
+| empty_password | You are sending an empty or no password in the request. |
+| invalid_email | You are providing an invalid email address. |
+| incorrect_password | You are providing an invalid password. |
 
 ### **Check existing email**
 
@@ -172,7 +175,7 @@ Log in users with email and password.
 
 | Error code | Description |
 | ------ | ------ |
-| invalid_email | You are providing an invalid or no email address |
+| invalid_email | You are providing an invalid or no email address. |
 
 ## **Embed methods**
 
