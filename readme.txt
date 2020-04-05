@@ -1,52 +1,78 @@
-=== Arengu Forms | Contact Forms, Multi Step Forms & Form Builder ===
+=== Arengu Forms | Sign-up Forms, Login Forms, Passwordless Forms, Payment Forms ===
 Contributors: arengu
-Tags: arengu, forms, lead generation, contact forms, lead forms, multi step forms, mobile forms, file upload forms, form builder, custom forms, mobile forms, payment forms, order forms, feedback forms, enquiry forms, workflows, form workflows, automation, integrations
+Tags: arengu, forms, lead generation, user registration, social login, sign-up forms, login forms, contact forms, lead forms, multi step forms, mobile forms, file upload forms, form builder, custom forms, mobile forms, payment forms, order forms, feedback forms, enquiry forms, workflows, form workflows, automation, integrations
 Requires at least: 4.5
-Tested up to: 4.9.8
+Tested up to: 5.4
 License: Apache License v2
 License URI: http://www.apache.org/licenses/LICENSE-2.0
 
-
-Collect data with smarter forms and automate your business with powerful and flexible workflows.
+Arengu is an easy, intuitive and low-code platform to build all the logic behind your sign-up forms.
 
 == Description ==
 
-Arengu helps you collecting data with smarter forms and automating your business with powerful and flexible workflows. Use our drag & drop form builder to easily create your own form and easily embed your form into any page of your website with a shortcode. Receive your results in real-time and enable email or push notifications.
+Forget about coding, validations, integrations or maintenance — Arengu is a solution both for marketers and developers. Save time and resources and start building powerful forms and flows with Arengu!
 
 > <strong> Important </strong><br>
 > This plugin is for embedding forms created on arengu.com and it uses our open source [JavaScript SDK](https://github.com/arengu/arengu-forms-js). You can only edit forms or see submissions inside our platform.
 
 ------------
 
-= Create powerful forms without code =
-* Different field types including text, number, multiple choice, dropdown, email, legal, date, file upload and payment
-* Use our native integrations and easily connect your favourite apps
-* Export submissions to CSV and JSON
+= Plugin main features =
+
+This plugin allows you to easily embed forms and enables user sign up and sign in capabilities with custom endpoints in WordPress.
+
+* Signup and login custom endpoint: Enable a custom API and allow users to sign up and login to your site with WordPress.
+* Passwordless login: Let your users sign up or log in without a password. This feature allows you to implement passwordless forms in WordPress, either for signups or logins.
+* Embed forms with a shortcode: You can use the WordPress plugin to embed your forms with a simple shortcode. Any modifications you have to make on your forms and flows will be automatically executed. Easy and fast!
+
+[Read our documentation to discover more details.](https://github.com/arengu/forms-wp-plugin)
+
+= Drag & drop form builder =
+
+Easily create your custom forms with our drag & drop builder. Add multiple steps, require payment details, create server-side logic... without writing a single line of code.
+
+* Forms with Flows
+* Approval workflows
+* Multi-step forms fields
+* Conditional logic
+* Social login
+* Payment fields
+
+= Visual flow editor =
+Create server-side logic for your forms to validate data and integrate with other APIs in real-time, or automate tasks with your favourite apps after someone submits a form.
+* Native integrations
+* Integration flows
+* Intuitive data mapping
+* Debugging mode
 
 [See more at arengu.com](https://www.arengu.com)
 
 == Installation ==
 
-1. Upload the plugin folder to the `/wp-content/plugins/` directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Add your Arengu Form using the button that has been added to post/pages editor
-4. Add your form ID
+1. Upload the plugin folder to the `/wp-content/plugins/` directory.
+2. Activate the plugin through the 'Plugins' menu in WordPress.
+3. Go to 'Arengu' menu to enable or disable custom endpoints for advanced use cases.
+4. Build your form in [arengu.com](https://www.arengu.com) and paste the shortcode in 'Share' tab.
 
 == Frequently Asked Questions ==
 
-= The button doesn't do anything, is it a bug? =
-
-For now we just support visual editor, if you're in text mode, the plugin won't work as intented.
-
 = How can I add a form to my content? =
 
-Just click the button beside the Media Upload button complete the form fields, just the form ID is required.
+Just click the button with the arengu logo and insert your form ID.
 
 = Which is the shortcode? =
 
 `[arengu-form id="your-form-id"]`
 
 Notice the only parameter required is the form ID.
+
+== Screenshots ==
+
+1. Create your form inside arengu.com
+2. Use the shortcode into a post, page or text widget
+3. Beautiful forms everywhere
+4. Receive your results in real-time
+5. Easily connect your favourite apps
 
 == Changelog ==
 

@@ -4,7 +4,7 @@
  * Plugin Name:       Arengu Forms
  * Plugin URI:        https://github.com/arengu/forms-wp-plugin
  * Description:       Easily embed Arengu Forms into your webpage with our WordPress plugin.
- * Version:           1.0.0
+ * Version:           2.0.0
  * Author:            Arengu
  * Author URI:        https://www.arengu.com
  * License:           Apache License 2.0
@@ -16,7 +16,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-define( 'ARENGU_FORMS_VERSION', '1.0.0' );
+define( 'ARENGU_FORMS_VERSION', '2.0.0' );
 
 function activate_arengu_forms() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-arengu-forms-activator.php';
