@@ -222,7 +222,7 @@ Place the following HTML tag where you want your form to appear:
 <div data-arengu-form-id="YOUR_FORM_ID"></div>
 ```
 
-### Method 3:** Calling our `embed` method
+### Method 3: Calling our `embed` method
 
 Our SDK has a method to embed your form inside any element.
 
