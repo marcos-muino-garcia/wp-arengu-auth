@@ -48,22 +48,17 @@ class Arengu_Forms_Public {
 
 	/**
 	 * Helper function to parse auth cookie
-	 * @param $user_id - String - User ID
-	 * @param $duration - Number - Cookie duration time in seconds
+	 * @param $user_id - String - User ID.
+	 * @param $remember - Boolean - The default the cookie is kept without remembering is two days. When $remember is set, the cookies will be kept for 14 days.
+	 * @param $secure - Boolean - Whether the auth cookie should only be sent over HTTPS.
 	 */
-	function generate_auth_cookie ($user_id, $duration) {
-		$cookieScheme = 'logged_in';
-		$newDuration = is_null($duration) ? time() + 7200 : $duration;
-		$cookie = wp_generate_auth_cookie($user_id, $newDuration, $cookieScheme);
-
-		$parsedCookie = explode('|', $cookie);
+	function generate_auth_cookie ($user_id, $remember = false, $secure = true) {
+		wp_set_auth_cookie($user_id, $remember, $secure);
+		$user = get_userdata($user_id);
 
 		$response = new stdClass();
-		$response->user->id = $user_id;
-		$response->user->name = $parsedCookie[0];
-		$response->cookie->expiration = $parsedCookie[1];
-		$response->cookie->name = LOGGED_IN_COOKIE;
-		$response->cookie->value = $cookie;
+		$response->user->id = $user->data->ID;
+		$response->user->email = $user->data->user_email;
 
 		return $response;
 	}
@@ -93,7 +88,8 @@ class Arengu_Forms_Public {
 		$email = sanitize_email($request['email']);
 		$username = $request['username'] ? sanitize_user($request['username']) : $email;
 		$password = $request['password'] ? trim($request['password']) : wp_generate_password();
-		$sessionDuration = $request['sessionDuration'];
+		$remember = $request['request'];
+		$secure = $request['secure'];
 		$meta = $request['meta'];
 
 		$new_user_id = wp_create_user($username, $password, $email);
@@ -115,7 +111,7 @@ class Arengu_Forms_Public {
 			$this->custom_add_user_meta($meta, $new_user_id);
 		}
 
-		$responseObj = $this->generate_auth_cookie($new_user_id, $sessionDuration);
+		$responseObj = $this->generate_auth_cookie($new_user_id, $remember, $secure);
 
 		$response = new WP_REST_Response($responseObj);
     $response->set_status(200);
@@ -173,7 +169,8 @@ class Arengu_Forms_Public {
 
 		$email = sanitize_email($request['email']);
 		$password = $request['password'];
-		$sessionDuration = $request['sessionDuration'];
+		$remember = $request['request'];
+		$secure = $request['secure'];
 
 		$user = wp_authenticate($email, $password);
 
@@ -189,10 +186,10 @@ class Arengu_Forms_Public {
 			return $response;
 		}
 
-		$responseObj = $this->generate_auth_cookie($user->ID, $sessionDuration);
+		$responseObj = $this->generate_auth_cookie($user->ID, $remember, $secure);
 
 		$response = new WP_REST_Response($responseObj);
-    $response->set_status(200);
+		$response->set_status(200);
 
     return $response;
 	}
@@ -214,7 +211,8 @@ class Arengu_Forms_Public {
 		}
 
 		$email = sanitize_email($request['email']);
-		$sessionDuration = $request['sessionDuration'];
+		$remember = $request['request'];
+		$secure = $request['secure'];
 
 		$email_exists = email_exists($email);
 
@@ -230,7 +228,7 @@ class Arengu_Forms_Public {
 			return $response;
 		}
 
-		$responseObj = $this->generate_auth_cookie($email_exists, $sessionDuration);
+		$responseObj = $this->generate_auth_cookie($email_exists, $remember, $secure);
 
 		$response = new WP_REST_Response($responseObj);
     $response->set_status(200);

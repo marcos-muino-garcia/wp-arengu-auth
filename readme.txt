@@ -69,10 +69,10 @@ Notice the only parameter required is the form ID.
 == Screenshots ==
 
 1. Create your form inside arengu.com
-2. Use the shortcode into a post, page or text widget
-3. Beautiful forms everywhere
-4. Receive your results in real-time
-5. Easily connect your favourite apps
+2. Link flows to different form stages: between steps, before submission or after submission
+3. Visually build flows to add server-side logic to your forms or automate tasks
+4. Debug all your flow executions
+5. Receive all your form submission results
 
 == Changelog ==
 
