@@ -1,0 +1,30 @@
+{
+    "name": "arengu/wordpress-arengu-auth",
+    "description": "Connect Arengu to your WordPress authentication system",
+    "authors": [
+        {
+            "name": "Arengu",
+            "email": "support@arengu.com"
+        }
+    ],
+    "require": {
+        "firebase/php-jwt": "^5.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "ArenguAuth\\": "src/"
+        }
+    },
+    "scripts": {
+        "fix": "phpcbf --ignore=*/vendor/* --extensions=php .",
+        "lint": "phpcs --ignore=*/vendor/* --extensions=php -s ."
+    },
+    "config": {
+        "preferred-install": "dist"
+    },
+    "require-dev": {
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
+        "phpcompatibility/php-compatibility": "^9.3",
+        "phpcompatibility/phpcompatibility-wp": "^2.1"
+    }
+}

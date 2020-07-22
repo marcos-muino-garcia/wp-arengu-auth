@@ -1,18 +1,29 @@
 # Arengu Auth Wordpress plugin
-This module enables custom signup, login and passwordless endpoints to interact with Wordpress authentication system from Arengu.
+This module enables custom signup, login and passwordless endpoints to interact with WordPress's authentication system from [Arengu flows](https://www.arengu.com/flows/).
+
+## Installation
+
+1. Upload the plugin folder to the `/wp-content/plugins/` directory.
+2. Activate the plugin through the "Plugins" menu in WordPress.
+3. Go to "Arengu" menu to see the info you need to connect a flow to WordPress.
 
 ## Available endpoints
 
-1. [Signup](#signup)
-2. [Login](#login)
-3. [Passwordless](#passwordless)
-4. [Check existing email](#check-existing-email)
+- [Private endpoints](#private-endpoints)
+  1. [Signup](#signup)
+  2. [Login](#login)
+  3. [Passwordless](#passwordless)
+  5. [Check existing email](#check-existing-email)
+- [Public endpoints](#public-endpoints)
+  1. [Login with JWT](#login-with-jwt)
 
-### Authentication
+### Private endpoints
 
-This module uses an API key to authenticate requests. You can view and manage your API key under your module settings. This API key **allows to impersonate any user in your site, so you must keep it secret and do not share it in publicly accessible areas such as GitHub, client-side code, and so forth.**
+The private part of the API is protected by an API key. You can view and manage your API key under your plugin settings, in the WordPress admin panel.
 
-Authentication to the API is performed via bearer authentication:
+> **Warning:** This API key **allows to impersonate any user in your blog, so you must keep it secret and do not share it in publicly accessible areas such as GitHub, client-side code, and so forth.**
+
+Authentication to the API is performed via `Authorization` header with `Bearer` schema:
 
 ```
 Authorization: Bearer YOUR_API_KEY
@@ -22,7 +33,10 @@ Authorization: Bearer YOUR_API_KEY
 
 Sign up users with email and password or just with an email (passwordless signup).
 
-`POST` **/wp-json/arengu/signup**
+```
+POST /index.php?rest_route=/arengu/signup
+Content-Type: application/json
+```
 
 #### Request parameters
 
@@ -30,13 +44,15 @@ Sign up users with email and password or just with an email (passwordless signup
 | ------ | ------ | ------ |
 | email _(required)_| [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | The user email. |
 | password _(optional)_ | [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | The user plain password. If you don't provide a password a random one will be generated. This is useful if you want to use passwordless flows. |
+| first_name _(optional)_ | [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | The user's first name. |
+| last_name _(optional)_ | [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | The user's last name. |
 | meta _(optional)_ | [Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) | An object with key-value pairs with user meta data. |
-| remember _(optional)_ | [Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean) | The default the cookie is kept without remembering is two days. When remember is set, the cookies will be kept for 14 days (Default value is `false`). |
-| secure _(optional)_ | [Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean) | Whether the auth cookie should only be sent over HTTPS (Default value is `true`). |
 
-#### Request sample
+#### Operation example
 
-```json
+```
+> POST /index.php?rest_route=/arengu/signup
+> Content-Type: application/json
 {
   "email": "jane.doe@arengu.com",
   "password": "foobar",
@@ -44,24 +60,21 @@ Sign up users with email and password or just with an email (passwordless signup
     "company": "Arengu",
     "city": "A Coruña"
   },
-  "remember": true
+  "first_name": "Jane",
+  "last_name": "Doe"
 }
-```
 
-#### Response headers sample
-
-```curl
-Set-Cookie: wordpress_logged_in_37d007a.....=jane.doe%40arengu.com%7C1591208581%7C2i6gINuPt1uzilqyJm4....; path=/; HttpOnly
-```
-
-#### Response body sample
-
-```json
+< HTTP/1.1 200 OK
+< Content-Type: application/json
 {
   "user": {
-    "id": "1",
-    "email": "jane.doe@arengu.com"
+    "id": 1,
+    "email": "jane.doe@arengu.com",
+    "first_name": "Jane",
+    "last_name": "Doe"
   },
+  "token": "...",
+  "login_url": "..."
 }
 ```
 
@@ -70,13 +83,16 @@ Set-Cookie: wordpress_logged_in_37d007a.....=jane.doe%40arengu.com%7C1591208581%
 | Error code | Description |
 | ------ | ------ |
 | existing_user_login | This email is already being used by another user. |
-| empty_user_login | You are not sending an email addres in the request. |
+| empty_user_login | You are not sending an email address in the request. |
 
 ### Login
 
 Log in users with email and password.
 
-`POST` **/wp-json/arengu/auth**
+```
+POST /index.php?rest_route=/arengu/login_password
+Content-Type: application/json
+```
 
 #### Request parameters
 
@@ -84,32 +100,28 @@ Log in users with email and password.
 | ------ | ------ | ------ |
 | email _(required)_| [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | The user email you want to sign up. |
 | password _(required)_ | [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | Query selector or DOM element that the form will be appended to. |
-| remember _(optional)_ | [Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean) | The default the cookie is kept without remembering is two days. When remember is set, the cookies will be kept for 14 days (Default value is `false`). |
-| secure _(optional)_ | [Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean) | Whether the auth cookie should only be sent over HTTPS (Default value is `true`). |
+| expires_in _(optional)_ | [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number) | Number of seconds that the JWT will be valid. By default it's 300 (5 minutes). |
+| redirect_uri _(optional)_ | [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | The URL where you want to redirect the user after logging him in when you send him to the JWT verification endpoint. By default it's the user account page. |
 
-#### Request sample
-
-```json
+```
+> POST /index.php?rest_route=/arengu/login_password
+> Content-Type: application/json
 {
   "email": "jane.doe@arengu.com",
-  "password": "foobar"
+  "password": "foobar",
 }
-```
 
-#### Response headers sample
-
-```curl
-Set-Cookie: wordpress_logged_in_37d007a.....=jane.doe%40arengu.com%7C1591208581%7C2i6gINuPt1uzilqyJm4....; path=/; HttpOnly
-```
-
-#### Response body sample
-
-```json
+< HTTP/1.1 200 OK
+< Content-Type: application/json
 {
   "user": {
-    "id": "1",
-    "email": "jane.doe@arengu.com"
+    "id": 1,
+    "email": "jane.doe@arengu.com",
+    "first_name": "Jane",
+    "last_name": "Doe"
   },
+  "token": "...",
+  "login_url": "..."
 }
 ```
 
@@ -122,45 +134,45 @@ Set-Cookie: wordpress_logged_in_37d007a.....=jane.doe%40arengu.com%7C1591208581%
 | invalid_email | You are providing an invalid email address that is not registered. |
 | incorrect_password | You are providing an invalid password. |
 
-
 ### Passwordless
 
 Authenticate users without password.
 
-`POST` **/wp-json/arengu/passwordless/auth**
+```
+POST /index.php?rest_route=/arengu/passwordless_login
+Content-Type: application/json
+```
 
-⚠️ **IMPORTANT** ⚠️ This endpoint is made to be used adding one authentication factor to verify the user identity (eg. one-time password via email or SMS, social login, etc).
+> **Warning:** This endpoint was designed to be invoked once the user identity is verified using, at least, one authentication factor (eg. one-time password via email or SMS, social login, etc).
 
 #### Request parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | email _(required)_| [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | The user email you want to authenticate. |
-| remember _(optional)_ | [Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean) | The default the cookie is kept without remembering is two days. When remember is set, the cookies will be kept for 14 days (Default value is `false`). |
-| secure _(optional)_ | [Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean) | Whether the auth cookie should only be sent over HTTPS (Default value is `true`). |
+| expires_in _(optional)_ | [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number) | Number of seconds that the JWT will be valid. By default it's 300 (5 minutes). |
+| redirect_uri _(optional)_ | [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | The URL where you want to redirect the user after logging him in when you send him to the JWT verification endpoint. By default it's the user account page. |
 
-#### Request sample
+##### Operation example
 
-```json
+```
+> POST /index.php?rest_route=/arengu/passwordless_login
+> Content-Type: application/json
 {
   "email": "jane.doe@arengu.com"
 }
-```
 
-#### Response headers sample
-
-```curl
-Set-Cookie: wordpress_logged_in_37d007a.....=jane.doe%40arengu.com%7C1591208581%7C2i6gINuPt1uzilqyJm4....; path=/; HttpOnly
-```
-
-#### Response body sample
-
-```json
+< HTTP/1.1 200 OK
+< Content-Type: application/json
 {
   "user": {
-    "id": "1",
-    "email": "jane.doe@arengu.com"
+    "id": 1,
+    "email": "jane.doe@arengu.com",
+    "first_name": "Jane",
+    "last_name": "Doe"
   },
+  "token": "...",
+  "login_url": "..."
 }
 ```
 
@@ -174,7 +186,10 @@ Set-Cookie: wordpress_logged_in_37d007a.....=jane.doe%40arengu.com%7C1591208581%
 
 Check if an email exists in your database.
 
-`POST` **/wp-json/arengu/checkEmail**
+```
+POST /index.php?rest_route=/arengu/check_email
+Content-Type: application/json
+```
 
 #### Request parameters
 
@@ -182,17 +197,17 @@ Check if an email exists in your database.
 | ------ | ------ | ------ |
 | email _(required)_| [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | The user email. |
 
-#### Request sample
 
-```json
+##### Operation example
+```
+> POST /index.php?rest_route=/arengu/check_email
+> Content-Type: application/json
 {
   "email": "jane.doe@arengu.com"
 }
-```
 
-#### Response sample
-
-```json
+< HTTP/1.1 200 OK
+< Content-Type: application/json
 {
   "email_exists": true
 }
@@ -206,7 +221,7 @@ Check if an email exists in your database.
 
 ## Embed methods
 
-### Method 1: Using a shortcode tag (Recommended)
+### Recommended method: use a shortcode tag in a post or page
 Place the following shortcode tag where you want your form to appear:
 
 ```
@@ -215,40 +230,5 @@ Place the following shortcode tag where you want your form to appear:
 
 You have to replace `YOUR_FORM_ID` with your **Form ID**, which you can find in your form settings or share page.
 
-### Method 2: Using an HTML tag
-Place the following HTML tag where you want your form to appear:
-
-```html
-<div data-arengu-form-id="YOUR_FORM_ID"></div>
-```
-
-### Method 3: Calling our `embed` method
-
-Our SDK has a method to embed your form inside any element.
-
-`embed` method definition:
-```
-ArenguForms.embed(formId, selector);
-```
-The `embed` call has the following fields:
-
-| Parameter | Type | Description |
-| ------ | ------ | ------ |
-| formId _(required)_| [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | The **Form ID** of your form. You can find it in your form settings or share page. |
-| selector _(required)_ | [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)\|[Element](https://developer.mozilla.org/en-US/docs/Web/API/Element) | Query selector or DOM element that the form will be appended to. |
-
-Example using the query selector:
-
-```javascript
-ArenguForms.embed('5073697614331904', '.form-container');
-```
-
-That snippet will embed the form with ID `5073697614331904` into the element with `.form-container` class.
-
-Another example using the element directly:
-
-```javascript
-const container = document.querySelector('.form-container');
-ArenguForms.embed('5073697614331904', container);
-```
-In this case, the snippet gets a reference to the element and passes it directly to the `embed()` method.
+### Advanced method: use our SDK directly
+You can read more about this in [the repository for our SDK](https://github.com/arengu/forms-js-sdk).
