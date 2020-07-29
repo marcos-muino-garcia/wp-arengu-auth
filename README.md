@@ -34,7 +34,7 @@ Authorization: Bearer YOUR_API_KEY
 Sign up users with email and password or just with an email (passwordless signup).
 
 ```
-POST /index.php?rest_route=/arengu/signup
+POST /index.php?rest_route=/arengu_auth/signup
 Content-Type: application/json
 ```
 
@@ -51,7 +51,7 @@ Content-Type: application/json
 #### Operation example
 
 ```
-> POST /index.php?rest_route=/arengu/signup
+> POST /index.php?rest_route=/arengu_auth/signup
 > Content-Type: application/json
 {
   "email": "jane.doe@arengu.com",
@@ -90,7 +90,7 @@ Content-Type: application/json
 Log in users with email and password.
 
 ```
-POST /index.php?rest_route=/arengu/login_password
+POST /index.php?rest_route=/arengu_auth/login_password
 Content-Type: application/json
 ```
 
@@ -104,7 +104,7 @@ Content-Type: application/json
 | redirect_uri _(optional)_ | [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | The URL where you want to redirect the user after logging him in when you send him to the JWT verification endpoint. By default it's the user account page. |
 
 ```
-> POST /index.php?rest_route=/arengu/login_password
+> POST /index.php?rest_route=/arengu_auth/login_password
 > Content-Type: application/json
 {
   "email": "jane.doe@arengu.com",
@@ -139,7 +139,7 @@ Content-Type: application/json
 Authenticate users without password.
 
 ```
-POST /index.php?rest_route=/arengu/passwordless_login
+POST /index.php?rest_route=/arengu_auth/passwordless_login
 Content-Type: application/json
 ```
 
@@ -156,7 +156,7 @@ Content-Type: application/json
 ##### Operation example
 
 ```
-> POST /index.php?rest_route=/arengu/passwordless_login
+> POST /index.php?rest_route=/arengu_auth/passwordless_login
 > Content-Type: application/json
 {
   "email": "jane.doe@arengu.com"
@@ -187,7 +187,7 @@ Content-Type: application/json
 Check if an email exists in your database.
 
 ```
-POST /index.php?rest_route=/arengu/check_email
+POST /index.php?rest_route=/arengu_auth/check_email
 Content-Type: application/json
 ```
 
@@ -200,7 +200,7 @@ Content-Type: application/json
 
 ##### Operation example
 ```
-> POST /index.php?rest_route=/arengu/check_email
+> POST /index.php?rest_route=/arengu_auth/check_email
 > Content-Type: application/json
 {
   "email": "jane.doe@arengu.com"
