@@ -6,7 +6,7 @@ class Config
 {
     private $data;
 
-    private static $prefix = 'arengu';
+    private static $prefix = 'arengu_auth';
     private static $instance = null;
 
     private function __construct()
@@ -21,6 +21,7 @@ class Config
             self::$instance->data = [
                 'plugin_path' => dirname(__DIR__),
                 'plugin_url' => plugin_dir_url(__DIR__),
+                'prefix' => self::$prefix,
                 'key_length' => 64, // bytes
                 'jwt_alg' => 'HS256',
                 'jwt_expiry' => 300,

@@ -52,7 +52,7 @@ class Login extends AbstractRoute
             [
                 'user' => $this->presentUser($user),
                 'token' => $token,
-                'login_url' => get_rest_url() . "arengu/login_jwt/{$token}",
+                'login_url' => get_rest_url() . $this->config->get('prefix') . "/login_jwt/{$token}",
             ]
         );
     }
