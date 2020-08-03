@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      BUILD_FILENAME: ${{ github.event.repository.name }}_${{ github.event.release.tag_name }}.zip
+      BUILD_FILENAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}.zip
 
     steps:
     - name: Checkout repository
