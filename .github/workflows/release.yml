@@ -1,0 +1,39 @@
+name: Release version
+
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      BUILD_FILENAME: ${{ github.event.repository.name }}_${{ github.event.release.tag_name }}.zip
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        persist-credentials: false
+
+    - name: Install dependencies
+      run: composer install --no-dev --classmap-authoritative --no-progress --no-suggest
+
+    - name: Compress directory
+      run: |
+        SOURCE_DIR=$(basename $(pwd))
+        cd ..
+        zip -9 -q -r "$BUILD_FILENAME" "$SOURCE_DIR" --exclude "*/.*"
+
+    - name: Upload release asset
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ../${{ env.BUILD_FILENAME }}
+        asset_name: ${{ env.BUILD_FILENAME }}
+        asset_content_type: application/zip
