@@ -40,7 +40,7 @@ class Config
 
     public static function set($key, $value)
     {
-        if (array_key_exists($key, self::$instance->data[$key])) {
+        if (array_key_exists($key, self::$instance->data)) {
             return new \Exception('Cannot overwrite a hardcoded config value');
         }
 

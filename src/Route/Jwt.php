@@ -19,10 +19,16 @@ class Jwt extends AbstractRoute
 
     public function execute($request)
     {
+        $secret = $this->config->get('jwt_secret');
+
+        if (!$secret) {
+            return $this->friendlyError(500, 'The secret was not configured.');
+        }
+
         try {
             $decodedToken = (array) JwtLib::decode(
                 $this->getTrimmedString($request, 'token'),
-                $this->config->get('jwt_secret'),
+                $secret,
                 [$this->config->get('jwt_alg')]
             );
         } catch (ExpiredException $ex) {

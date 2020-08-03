@@ -28,7 +28,7 @@ abstract class AbstractRoute
         $methods = is_array($methods) ? $methods : [$methods];
 
         register_rest_route(
-            'arengu_auth',
+            $this->config->get('prefix'),
             $path,
             [
                 'methods' => $methods,
@@ -41,8 +41,10 @@ abstract class AbstractRoute
 
     protected function checkAuthKey()
     {
-        return hash_equals(
-            'Bearer ' . $this->config->get('private_key'),
+        $key = $this->config->get('private_key');
+
+        return $key && hash_equals(
+            "Bearer {$key}",
             $this->getAuthHeader()
         );
     }
