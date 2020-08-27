@@ -47,6 +47,7 @@ Content-Type: application/json
 | first_name _(optional)_ | [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | The user's first name. |
 | last_name _(optional)_ | [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | The user's last name. |
 | meta _(optional)_ | [Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) | An object with key-value pairs with user meta data. |
+| redirect_uri _(optional)_ | [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | The URL where you want to redirect the user after signing him up when you send him to the JWT verification endpoint. By default it's the user account page. |
 
 #### Operation example
 
