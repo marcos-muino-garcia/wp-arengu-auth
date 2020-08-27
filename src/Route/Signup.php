@@ -33,7 +33,7 @@ class Signup extends AbstractRoute
 
         if (is_array($meta)) {
             foreach ($meta as $key => $value) {
-                add_user_meta($user->ID, (string) $key, (string) $value);
+                add_user_meta($user->ID, $key, $value);
             }
         }
 
