@@ -6,9 +6,9 @@ class Setup
 {
     public static function execute()
     {
-        register_activation_hook(__FILE__, '\ArenguAuth\Setup::activate');
-        register_deactivation_hook(__FILE__, '\ArenguAuth\Setup::deactivate');
-        register_uninstall_hook(__FILE__, '\ArenguAuth\Setup::uninstall');
+        register_activation_hook(ARENGU_PLUGIN_FILE, '\ArenguAuth\Setup::activate');
+        register_deactivation_hook(ARENGU_PLUGIN_FILE, '\ArenguAuth\Setup::deactivate');
+        register_uninstall_hook(ARENGU_PLUGIN_FILE, '\ArenguAuth\Setup::uninstall');
 
         add_action('init', '\ArenguAuth\Setup::registerShortcode');
         add_action('admin_menu', '\ArenguAuth\Setup::registerSettings');
