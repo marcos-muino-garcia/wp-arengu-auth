@@ -10,12 +10,12 @@ This module enables custom signup, login and passwordless endpoints to interact 
 ## Available endpoints
 
 - [Private endpoints](#private-endpoints)
-  1. [Signup](#signup)
-  2. [Login](#login)
+  1. [Sign up](#sign-up)
+  2. [Log in](#log-in)
   3. [Passwordless](#passwordless)
   5. [Check existing email](#check-existing-email)
 - [Public endpoints](#public-endpoints)
-  1. [Login with JWT](#login-with-jwt)
+  1. [Log in with JWT](#log-in-with-jwt)
 
 ### Private endpoints
 
@@ -47,6 +47,7 @@ Content-Type: application/json
 | first_name _(optional)_ | [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | The user's first name. |
 | last_name _(optional)_ | [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | The user's last name. |
 | meta _(optional)_ | [Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) | An object with key-value pairs with user meta data. |
+| expires_in _(optional)_ | [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number) | Number of seconds that the JWT will be valid. By default it's 300 (5 minutes). |
 | redirect_uri _(optional)_ | [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | The URL where you want to redirect the user after signing him up when you send him to the JWT verification endpoint. By default it's the user account page. |
 
 #### Operation example
@@ -219,6 +220,19 @@ Content-Type: application/json
 | Error code | Description |
 | ------ | ------ |
 | invalid_email | You are providing an invalid or no email address. |
+
+
+#### Log in with JWT
+
+Make a user to be logged in by redirecting him to this URL with a signed JWT that you previously received as a response in a signup or login request.
+
+`GET` **/index.php?rest_route=/arengu_auth/login_jwt**
+
+##### URL parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| token _(required)_| [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | A signed JSON web token (JWT), containing `sub` (the user ID), `email` (the user email) and optionally `redirect_uri` with the absolute or relative URL the user will be redirected after the login. If the latter is not specified, the user will be redirected to the home page. |
 
 ## Embed methods
 
