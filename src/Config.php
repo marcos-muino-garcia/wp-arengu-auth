@@ -56,7 +56,14 @@ class Config
             return new \Exception('Cannot overwrite a hardcoded config value');
         }
 
-        add_option(self::prefix($key), $value);
+        update_option(self::prefix($key), $value);
+    }
+
+    public static function setIfUnset($key, $value)
+    {
+        if (self::get($key) === false) {
+            self::set($key, $value);
+        }
     }
 
     public static function del($key)

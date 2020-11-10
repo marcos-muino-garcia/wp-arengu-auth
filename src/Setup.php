@@ -30,8 +30,8 @@ class Setup
         $config = Config::getInstance();
         $key_length = $config->get('key_length');
 
-        $config->set('private_key', self::generateKey($key_length));
-        $config->set('jwt_secret', self::generateKey($key_length));
+        $config->setIfUnset('private_key', self::generateKey($key_length));
+        $config->setIfUnset('jwt_secret', self::generateKey($key_length));
     }
 
     public static function deactivate()
