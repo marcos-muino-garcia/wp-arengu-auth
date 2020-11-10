@@ -33,6 +33,18 @@ class Config
 
     public static function get($key)
     {
+        $env = false;
+
+        if ($key === 'jwt_secret') {
+            $env = getenv('ARENGU_AUTH_JWT_SECRET');
+        } elseif($key === 'private_key') {
+            $env = getenv('ARENGU_AUTH_API_KEY');
+        }
+
+        if ($env !== false) {
+            return $env;
+        }
+
         return array_key_exists($key, self::$instance->data) ?
             self::$instance->data[$key] :
             get_option(self::prefix($key));
