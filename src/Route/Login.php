@@ -15,7 +15,7 @@ class Login extends AbstractRoute
     {
         $p = $this->getTrimmedStrings(
             $request,
-            ['email', 'password', 'expires_in', 'redirect_uri']
+            ['email', 'password']
         );
 
         $user =
@@ -40,11 +40,13 @@ class Login extends AbstractRoute
             );
         }
 
+        $t = $this->getTokenParams($request);
+
         $token = $this->buildToken(
             $user->ID,
             $p['email'],
-            $p['expires_in'] ? $p['expires_in'] : $this->config->get('jwt_expiry'),
-            $p['redirect_uri']
+            $t['expires_in'],
+            $t['redirect_uri']
         );
 
         return $this->buildRestResponse(
