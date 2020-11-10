@@ -4,7 +4,7 @@
  * Plugin Name: Arengu Auth
  * Plugin URI:  https://github.com/arengu/arengu-auth-wp-plugin
  * Description: Connect Arengu to your WordPress authentication system.
- * Version:     3.0.2
+ * Version:     {{ VERSION }}
  * Author:      Arengu
  * Author URI:  https://www.arengu.com
  * License:     Apache License 2.0
