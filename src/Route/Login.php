@@ -24,9 +24,16 @@ class Login extends AbstractRoute
             $this->getUserByCredentials($p['email'], $p['password']);
 
         if (is_wp_error($user)) {
+            $status = 400;
+            $code = $user->get_error_code();
+
+            if ($code === 'invalid_username') {
+                $status = 404;
+            }
+
             return $this->buildRestError(
-                401,
-                $user->get_error_code(),
+                $status,
+                $code,
                 $user->get_error_message(),
                 $p['email']
             );

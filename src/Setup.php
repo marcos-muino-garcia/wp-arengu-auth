@@ -69,6 +69,15 @@ class Setup
                 $route->register();
             }
         );
+
+        // wordpress doesn't send the WWW-Authenticate header on a 401 error
+        add_filter('rest_post_dispatch', function($response) {
+            if ($response->get_status() === 401) {
+                $response->header('WWW-Authenticate', 'Bearer');
+            }
+
+            return $response;
+        });
     }
 
     public static function registerSettings()

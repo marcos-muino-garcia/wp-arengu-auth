@@ -20,7 +20,12 @@ abstract class AbstractRoute
 
     public function hasPermission()
     {
-        return $this->checkAuthKey();
+        $key = $this->config->get('private_key');
+
+        return $key && hash_equals(
+            "Bearer {$key}",
+            $this->getAuthHeader()
+        );
     }
 
     protected function simpleRegister($methods, $path)
@@ -36,16 +41,6 @@ abstract class AbstractRoute
                 'permission_callback' => [$this, 'hasPermission'],
                 'show_in_index' => false,
             ]
-        );
-    }
-
-    protected function checkAuthKey()
-    {
-        $key = $this->config->get('private_key');
-
-        return $key && hash_equals(
-            "Bearer {$key}",
-            $this->getAuthHeader()
         );
     }
 
@@ -168,10 +163,16 @@ abstract class AbstractRoute
         // with the username instead of the email, which we
         // don't support, so generate a more fitting error
         if (is_wp_error($user)) {
-            return new \WP_Error(
-                'email_not_exists',
-                'Sorry, this email is not registered.'
-            );
+            $code = $user->get_error_code();
+            $message = $user->get_error_message();
+
+            if ($code === 'invalid_username') {
+                $message = 'Sorry, this email is not registered.';
+            } else if ($code === 'incorrect_password') {
+                $message = 'Sorry, this password is incorrect.';
+            }
+
+            return new \WP_Error($code, $message);
         }
 
         return $user;
