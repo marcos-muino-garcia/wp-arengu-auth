@@ -44,26 +44,59 @@ abstract class AbstractRoute
         );
     }
 
-    protected function getAuthHeader()
+    private function getApacheHeaders()
     {
-        // https://bugs.php.net/bug.php?id=72915
-        // https://github.com/symfony/symfony/issues/19693
+        static $headers = null;
 
-        $header = null;
+        if ($headers === null) {
+            if(function_exists('apache_request_headers')) {
+                $headers = apache_request_headers();
 
-        if (isset($_SERVER['Authorization'])) {
-            $header = $_SERVER['Authorization'];
-        } elseif (isset($_SERVER['HTTP_AUTHORIZATION'])) {
-            $header = $_SERVER['HTTP_AUTHORIZATION'];
-        } elseif (function_exists('apache_request_headers')) {
-            $apache_headers = apache_request_headers();
-
-            if (isset($apache_headers['Authorization'])) {
-                $header = $apache_headers['Authorization'];
+                if ($headers === false) {
+                    $headers = [];
+                } else {
+                    $headers = array_change_key_case(apache_request_headers(), CASE_LOWER);
+                }
+            } else {
+                $headers = [];
             }
         }
 
-        return $header;
+        return $headers;
+    }
+
+    protected function getAuthHeader()
+    {
+        // since some environments insist on deleting the 'Authorization' header
+        // from the request, try to fall back to our own non-standard header
+        $names = ['authorization', 'arengu-authorization'];
+
+        // https://bugs.php.net/bug.php?id=72915
+        // https://github.com/symfony/symfony/issues/19693
+        // https://datatracker.ietf.org/doc/html/rfc3875#section-9.2
+        foreach ($names as $lower) {
+            $upper = strtoupper($lower);
+            $prefixed = 'HTTP_' . str_replace('-', '_', $upper);
+
+            // fpm/cli
+            if (!empty($_SERVER[$prefixed])) {
+                return $_SERVER[$prefixed];
+            }
+            
+            // old cgi?
+            if (!empty($_SERVER[$upper])) {
+                return $_SERVER[$upper];
+            }
+            
+            // apache
+            $apache_headers = $this->getApacheHeaders();
+            
+            if (!empty($apache_headers[$lower])) {
+                return $apache_headers[$lower];
+            }
+        }
+
+        return '';
     }
 
     protected function buildRestResponse($status, $body = null)
